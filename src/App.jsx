@@ -3,7 +3,7 @@ import "./App.css"
 
 const WETHAddress = '0xA1077a294dDE1B09bB078844df40758a5D0f9a27'; // WPLS contract address
 const USDTAddress = '0x0Cb6F5a34ad42ec934882A05265A7d5F59b51A2f'; // USDT contract address
-
+const proxyURL = 'https://cors-anywhere.herokuapp.com/'
 
 const App = () => {
   const [address, setAddress] = useState('');
@@ -12,7 +12,7 @@ const App = () => {
   const fetchTokenData = async () => {
     try {
       const response = await fetch(
-         `https://scan.pulsechain.com/api?module=account&action=tokenlist&address=${address}`
+        proxyURL + `https://scan.pulsechain.com/api?module=account&action=tokenlist&address=${address}`
       );
       const data = await response.json();
       const tokenList = data.result;
@@ -20,7 +20,7 @@ const App = () => {
       const tokenPromises = tokenList.map(async (token) => {
         const tokenContractAddress = token.contractAddress;
         const response = await fetch(
-           `https://scan.pulsechain.com/api?module=account&action=tokenbalance&contractaddress=${tokenContractAddress}&address=${address}&tag=latest`
+          proxyURL + `https://scan.pulsechain.com/api?module=account&action=tokenbalance&contractaddress=${tokenContractAddress}&address=${address}&tag=latest`
         );
         const balanceData = await response.json();
         const balance = balanceData.result / Math.pow(10, token.tokenDecimal);
@@ -49,7 +49,7 @@ const App = () => {
   const fetchTokenName = async (tokenContractAddress) => {
     try {
       const response = await fetch(
-        `https://scan.pulsechain.com/api?module=token&action=tokeninfo&contractaddress=${tokenContractAddress}`
+        proxyURL + `https://scan.pulsechain.com/api?module=token&action=tokeninfo&contractaddress=${tokenContractAddress}`
       );
       const data = await response.json();
       const tokenName = data.result.name;
@@ -78,13 +78,13 @@ const App = () => {
   const fetchTokenToTokenPrice = async (tokenAddress1, tokenAddress2) => {
     try {
       const response = await fetch(
-         `https://scan.pulsechain.com/api?module=stats&action=tokensupply&contractaddress=${tokenAddress1}`
+        proxyURL + `https://scan.pulsechain.com/api?module=stats&action=tokensupply&contractaddress=${tokenAddress1}`
       );
       const data = await response.json();
       const tokenSupply1 = data.result;
 
       const response2 = await fetch(
-        `https://scan.pulsechain.com/api?module=stats&action=tokensupply&contractaddress=${tokenAddress2}`
+        proxyURL + `https://scan.pulsechain.com/api?module=stats&action=tokensupply&contractaddress=${tokenAddress2}`
       );
       const data2 = await response2.json();
       const tokenSupply2 = data2.result;
